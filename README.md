@@ -1,12 +1,13 @@
 # Python Dicegame
 
-A python game to see who wins the highest score.
-This game has 5 rounds, each round will roll a dice for 5 times;
-If numbers rolled adds up to a prime number, the player will gain 40 points;
-If all 5 numbers rolled are the same, the player will gain 80 points;
-If all 5 numbers rolled are different, the player will you'll gain 50 points
-If 4 numbers rolled are the same, the player will gain 30 points;
-If 5 numbers adds up to be divisible by 5, the player will gain 10 points;
+A python game to see who wins the highest score.<br>
+
+This game has 5 rounds, each round will roll a dice for 5 times;<br>
+If numbers rolled adds up to a prime number, the player will gain 40 points;<br>
+If all 5 numbers rolled are the same, the player will gain 80 points;<br>
+If all 5 numbers rolled are different, the player will you'll gain 50 points<br>
+If 4 numbers rolled are the same, the player will gain 30 points;<br>
+If 5 numbers adds up to be divisible by 5, the player will gain 10 points;<br>
 The player has the option to reroll each of the dice number for 3 times.
 
  - This program was a hell of a coding, but have fun!
