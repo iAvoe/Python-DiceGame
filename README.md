@@ -9,7 +9,7 @@ If 4 numbers rolled are the same, the player will gain 30 points;
 If 5 numbers adds up to be divisible by 5, the player will gain 10 points;
 The player has the option to reroll each of the dice number for 3 times.
 
- - This program was a hell to code, but have fun!
+ - This program was a hell of a coding, but have fun!
 
 ### Versions:
 
