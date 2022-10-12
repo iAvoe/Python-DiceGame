@@ -1,0 +1,137 @@
+# This game was taken from one of COMP10001's assignment,
+# but I've made it 400% better recently to be fair.
+# I know, this program is very complex to debug
+# I may not be able to see all of the problems to happen
+
+from ast import Break
+import random
+
+#function to check prime number
+def isPrime(number):
+    if number >= 2:
+        for y in range(2, number):
+            if not (number % y):
+                return False
+    else:
+        return False
+    return True
+
+#fuction to calculate score
+def pointsCalc(diRolls):
+    plyrScorePlus = 0
+    print('')
+    if (diRolls[0] + diRolls[1] + diRolls[2] + diRolls[3] + diRolls[4]) % 5 == 0:
+        print('All dice adds up to a number divisible by 5! (+10)')
+        plyrScorePlus += 10
+    if isPrime(sum(diRolls)) == True: #uses a prime determining funtion defined above, Googled
+        print('All dice adds up to a prime number! (+40)')
+        plyrScorePlus += 40
+    if diRolls[0] == diRolls[1] == diRolls[2] == diRolls[3] == diRolls[4]:
+        print('All 5 dice rolls are the same value! (+80)')
+        plyrScorePlus += 80
+    elif diRolls.count(diRolls[0]) > 2 or diRolls.count(diRolls[1]) > 2 or diRolls.count(diRolls[2]) > 2:
+        print('Minimum of 3 dies are the same value! (+30)') #3 compares are enough to know if min of 3 dies do have the same value
+        plyrScorePlus += 30
+    elif diRolls.count(diRolls[0]) > 1 or diRolls.count(diRolls[1]) > 1 or diRolls.count(diRolls[2]) > 1 or diRolls.count(diRolls[3]) > 1:
+        print('Minimum of 2 dies are the same value! (+20)') #4 compares are enough to know if min of 3 dies do have the same value
+        plyrScorePlus += 20
+    else:
+        print('All 5 dices are different! (+50)')
+        plyrScorePlus += 50
+    return plyrScorePlus
+
+#shorten random, default highest dice count is 6
+di_max = 6
+def di():
+    return random.randint(1, di_max)
+
+#permenent variable initialize
+playerScore = turn = 0
+pCountDown = 3
+
+#register
+fst_name = str(input('''----------------Welcome to the dice game----------------\n
+This game has 5 runs, each round will roll a dice for 5 times;
+If numbers add up to a prime number, you'll gain 40 points;
+If all 5 numbers rolled are the same, you'll gain 80 points;
+If all 5 numbers rolled are different, you'll gain 50 points
+If 4 numbers rolled are the same, you'll gain 30 points;
+If 5 numbers adds up to be divisible by 5, you'll gain 10 points;
+You have the option to reroll each of the dice number for 3 times.
+What\'s your first name: ''')) #Input first name only
+
+while fst_name.isalpha() == False: #Reject non alphabet player name
+    fst_name = str(input('\nSorry \''+fst_name+'\', please input alphabets only: '))
+
+fst_name = fst_name[0].upper() + fst_name[1:len(fst_name)].lower() #String processing to setup naming
+
+#New feature: change the highest dice roll possible before playing
+alt_di_max = str(input('\nEnter y to alter the highest dice count can be rolled\nDefault=6, higher is harder. Or press Enter to skip. (y/Enter): '))
+
+while alt_di_max != 'y': #Reject false input: not 'y', not ''
+    if alt_di_max == '': #Because no input means default, the loop will be skipped
+        break
+    alt_di_max = str(input('\nSorry \''+fst_name+', if you want to alter highest dice count, please input y, or press Enter to skip: '))
+
+if alt_di_max  == 'y' : #Optimization: because default is set to 6, judgement of == 'n' is no longer needed
+    di_max = str(input('\nPlease enter the highest dice number (integer larger than 1 only): '))
+
+    while di_max.isdigit() == False: #Prevent program from crashing when NaN gets entered
+        di_max = str(input('\nSorry \''+fst_name+', please input integer value larger than 1 only: '))
+
+    di_max = int(di_max) #Convert to integer when we make sure input value is acceptable
+
+    while di_max <= 1: #We can't use '>' for strings, therefore a 2nd while is needed
+        di_max += 1 #Instead of asking user to input with risk of NaN gets entered again, just make it work  
+        print('Highest dice count is < 1, adding 1 to this value...')
+
+print('\nThank you '+fst_name+', you starts off with 0 points and a dice with 0~'+str(di_max)+'. Let\'s play.')
+
+#Prerequesities ends here
+#Game starts here
+while turn < 5:
+    diRolls = [di(),di(),di(),di(),di()]
+    diReads = [str(i) for i in diRolls]
+    print('\nTurn ' + str(turn+1) + ' :\nYou\'ve rolled 5 dice. Their values are ' + ', '.join(diReads) + '. ')
+    drrPhase = 0 #This value is for counting how much die re-roll phases
+    pCountDown = 3
+    while drrPhase < 3 or pCountDown == '!': #the exclaimation is to continue a turn when out of phase, for score calculation purposes
+        drrUsed = False
+
+        if pCountDown != '!' and pCountDown > 0:
+            score_reRoll = str(input('\nDo you want to (s)core the points? This will end a turn;\nOr do you want to (r)eroll some dices? You have '+str(pCountDown)+' chances left (s/r): ')).lower()
+
+        if score_reRoll == 's' or pCountDown == '!': #Enter scoring processing and end this turn
+            playerScore += pointsCalc(diRolls)
+            print('Your total points are '+str(playerScore)+'.')
+            break
+        
+        elif pCountDown > 0 and score_reRoll == 'r': #Enter re-roll processing
+            drrPhase += 1
+            pCountDown -= 1
+            for drr in range(0, 5):
+                if str(input('Reroll die '+str(drr+1)+'? (y/n) ')).lower() == 'y': #it actually starts from die 0
+                    diRolls[drr] = di()
+                    print(diRolls[drr]) #show new die value
+                    drrUsed = True
+                else:
+                    print('-') #show a line, corresponds to show new die value
+                diReads = [str(i) for i in diRolls]
+            print('You\'ve rerolled some dice and their current values are ' + ', '.join(diReads)+'.')
+
+            if drrPhase == 3: #prevent early skip that makes a turn end before player score is registered
+                drrPhase = 3
+                pCountDown = '!'
+
+            else:
+                if drrUsed == False:
+                    print('ERROR: Actually, you didn\'t re-roll any dice, restoring you re-roll chances.\n')
+                    drrPhase -= 1
+                print('You have rerolled '+str(drrPhase)+' times so far. ')
+
+        else:
+            print('ERROR: You choosed neither s OR r, or you are out of chances. Please retry.\n')
+    turn += 1
+
+
+print('\nThank you for playing! Game Over. '+fst_name+' has got '+str(playerScore)+' points!')
