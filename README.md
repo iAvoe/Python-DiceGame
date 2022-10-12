@@ -12,6 +12,11 @@ The player has the option to reroll each of the dice number for 3 times.
 
  - This program was a hell of a coding, but have fun!
 
+### How to play
+
+ - For any PC with Python installed, simply right click --> open/Edit with --> Python/IDLE
+ - For a portable Python environment, simply issue command line: X:/PythonXX/python.exe "x:/folder/dicegamev4.py"
+
 ### Versions:
 
 **V1**:
@@ -44,3 +49,8 @@ The player has the option to reroll each of the dice number for 3 times.
  - time.strftime("%Y%m%d-%H%M%S") was added to filename for file separation
  - Example path was shown in user interaction to make user input of file saving path right
  - Default save to Desktop for both Windows and Linux OS
+
+**V5**:
+ - Being forced to turn this code into module
+ - forced di() function to take parameter di_max due to functions don't take others' params, which is less elegant
+ - User interaction is better thanks to indents created by functions
